@@ -8,14 +8,6 @@
       align-center
     >
       <span>{{ state.keys }}</span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">
-            Confirm
-          </el-button>
-        </span>
-      </template>
     </el-dialog>
   </div>
 </template>
