@@ -41,10 +41,10 @@
 </template>
 
 <script setup>
-import { useMenuOptions } from "../store/index";
+import { useMenuOptions } from "../../store/index";
 import { useRouter } from "vue-router";
 import CommonSearch from "./CommonSearch.vue";
-import CommonLogin from "./CommonLogin.vue";
+import CommonLogin from "../CommonLogin.vue";
 
 const menuStore = useMenuOptions();
 const router = useRouter();

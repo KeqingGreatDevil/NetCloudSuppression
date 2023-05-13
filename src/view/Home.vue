@@ -14,9 +14,21 @@
           <span>推荐歌曲</span>
         </div>
         <div class="r_music">
-          <img src="" alt="" />
-          <div class="bottom"></div>
-          <span></span>
+          <div
+            class="p_music"
+            v-for="item in state.playLists"
+            :key="item.id"
+            @click="clickDetail(item.id)"
+          >
+            <img :src="item.picUrl" style="width: 140px; height: 140px" />
+            <div class="bottom">
+              <div class="icon_headset">
+                <span class="ih_s">{{ changnum(item.playCount) }}</span>
+              </div>
+              <div class="icon_play"></div>
+            </div>
+            <span class="itemname">{{ item.name }}</span>
+          </div>
         </div>
       </el-card>
     </div>
@@ -26,15 +38,33 @@
 <script setup>
 import { onMounted, reactive } from "vue";
 import getBanner from "../request/api/home";
+import { getMusicplaylists } from "../request/api/item";
+import { useRouter } from "vue-router";
+
+const state = reactive({
+  images: [],
+  playLists: [],
+});
+const router = useRouter();
 
 onMounted(async () => {
   let res = await getBanner();
-  console.log(res.data.banners);
   state.images = res.data.banners;
+  let playlists = await getMusicplaylists();
+  state.playLists = playlists.data.result;
 });
-const state = reactive({
-  images: [],
-});
+
+const changnum = (num) => {
+  if (num >= 100000) {
+    return (num / 100000).toFixed(1) + "万";
+  }
+};
+const clickDetail = (id) => {
+  router.push({
+    name: "detail",
+    query: { id: id },
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -75,6 +105,60 @@ const state = reactive({
           width: 100%;
           font-size: 20px;
           font-weight: normal;
+        }
+      }
+      .r_music {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        margin-top: 30px;
+        .p_music {
+          width: 182px;
+          height: 234px;
+          position: relative;
+          .bottom {
+            width: 140px;
+            height: 27px;
+            font-size: 12px;
+            position: absolute;
+            bottom: 94px;
+            background-color: rgba($color: #000000, $alpha: 0.4);
+            display: flex;
+            justify-content: space-between;
+            .icon_headset {
+              width: 14px;
+              height: 11px;
+              margin: 9px 0 0 5px;
+              background: url(iconall.png) no-repeat 0 -24px;
+              display: flex;
+              align-items: center;
+              .ih_s {
+                width: 38px;
+                height: 17px;
+                margin-left: 17px;
+                color: #ccc;
+                white-space: nowrap;
+              }
+            }
+            .icon_play {
+              width: 16px;
+              height: 17px;
+              background: url(iconall.png) no-repeat 0 0;
+              margin: 5px 5px 0 0;
+              cursor: pointer;
+            }
+          }
+          .itemname {
+            display: inline-block;
+            width: 140px;
+            height: 40px;
+            vertical-align: middle;
+            cursor: pointer;
+            font-size: 14px;
+          }
         }
       }
     }

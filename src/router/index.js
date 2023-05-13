@@ -12,11 +12,20 @@ const routes = [
                 component: () => import('../view/Home.vue')
             },
             {
-                path: '/notfound',
-                name: 'notfound',
-                component: () => import('../view/NotFound.vue')
+                path: '/detail',
+                name: 'detail',
+                component: () => import('../view/Detail.vue')
             },
         ]
+    },
+    {
+        path:'/404',
+        name:'NotFound',
+        component:()=>import('../view/404.vue')
+    },
+    {
+        path:"/:catchAll(.*)",
+        redirect:'/404',
     }
 ]
 

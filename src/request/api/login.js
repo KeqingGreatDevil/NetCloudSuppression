@@ -1,15 +1,10 @@
 import service from '../index'
-function getkey(){
-return service({
-    method:'GET',
-    url:'/login/qr/key'
-})
+export function qrCodeLoginKey(timestamp){
+  return service.get('/login/qr/key?timestamp='+timestamp)
 }
-export function keycreate() {
-    return service({
-      method: "GET",
-      url: "/login/qr/create",
-    });
-  }
-export default getkey
-
+export function qrCodeLoginImg(key){
+  return service.get('/login/qr/create?qrimg=true&key='+key)
+}
+export function qrCodeLoginCheck(key,timestamp){
+  return service.get('/login/qr/check?key='+key+'&timestamp='+timestamp)
+}

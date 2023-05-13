@@ -43,3 +43,12 @@ export const useMenuOptions = defineStore("menu", {
     };
   },
 });
+export const usePlayMusicBase= defineStore("music",{
+  state:()=>{
+    return {
+      PlayMusicBase:[
+        
+      ]
+    }
+  }
+})
