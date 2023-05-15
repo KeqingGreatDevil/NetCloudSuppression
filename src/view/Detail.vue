@@ -14,8 +14,19 @@
               item
             }}</span>
           </div>
-          <p ref="showme">介绍： {{ state.MusicDetail.description }}</p>
-          <div @click="show">{{ state.showtitle }}</div>
+          <p
+            ref="showme"
+            :class="{ unfoldText: state.listOpenFlag }"
+            class="d_introduce"
+          >
+            介绍： {{ state.MusicDetail.description }}
+          </p>
+          <span
+            v-if="state.showBtnFlag"
+            @click="state.listOpenFlag = !state.listOpenFlag"
+          >
+            {{ state.listOpenFlag ? "展开" : "收起" }}
+          </span>
         </div>
       </div>
     </el-card>
@@ -31,20 +42,19 @@ onMounted(async () => {
   let id = useRoute().query.id;
   let res = await getMusicDetail(id);
   state.MusicDetail = res.data.playlist;
-  console.log(res);
 });
+const showBtnFlag = false;
 const state = reactive({
   MusicDetail: "",
-  showtitle: "展开",
+  listOpenFlag: "false",
+  showBtnFlag: "false",
 });
-const showme = ref();
-const show = () => {
-  if (showme) {
-    if (showme.value.clientHeight >= 200) {
-    }
-    console.log(showme.value.clientHeight);
+const showme = ref(null);
+onMounted(() => {
+  if (showme.clientHeight >= 200) {
+    state.showBtnFlag = true;
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -79,10 +89,14 @@ const show = () => {
       color: #777;
       cursor: pointer;
     }
-    p {
+    .d_introduce {
       width: 410px;
       height: 100%;
-      white-space: break-spaces;
+      white-space: pre-wrap;
+    }
+    .unfoldText {
+      height: 200px;
+      overflow: hidden;
     }
   }
 }
