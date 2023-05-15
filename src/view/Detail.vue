@@ -4,9 +4,18 @@
       <div class="msg">
         <img :src="state.MusicDetail.coverImgUrl" class="d_img" />
         <div class="d_msg">
-          <h2>{{ state.MusicDetail.name }}</h2>
-          <p>标签:{{ state.MusicDetail.tags }}</p>
-          <p>介绍:{{ state.MusicDetail.description }}</p>
+          <div style="display: flex; align-items: center">
+            <span class="d_bgImg"></span>
+            <h2>{{ state.MusicDetail.name }}</h2>
+          </div>
+          <div>
+            标签：
+            <span class="tags" v-for="item in state.MusicDetail.tags">{{
+              item
+            }}</span>
+          </div>
+          <p ref="showme">介绍： {{ state.MusicDetail.description }}</p>
+          <div @click="show">{{ state.showtitle }}</div>
         </div>
       </div>
     </el-card>
@@ -15,7 +24,7 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { getMusicDetail } from "../request/api/item";
 
 onMounted(async () => {
@@ -26,7 +35,16 @@ onMounted(async () => {
 });
 const state = reactive({
   MusicDetail: "",
+  showtitle: "展开",
 });
+const showme = ref();
+const show = () => {
+  if (showme) {
+    if (showme.value.clientHeight >= 200) {
+    }
+    console.log(showme.value.clientHeight);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -41,11 +59,29 @@ const state = reactive({
     margin-right: 30px;
   }
   .d_msg {
+    width: 410px;
+    height: 100%;
+    box-sizing: border-box;
+    .d_bgImg {
+      width: 64px;
+      height: 24px;
+      background: url(icon.png) no-repeat 0 -243px;
+      margin-right: 10px;
+    }
+    .tags {
+      width: 100%;
+      height: 22px;
+      font-size: 12px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 0 13px;
+      margin: 0 5px;
+      color: #777;
+      cursor: pointer;
+    }
     p {
       width: 410px;
-      font-size: 12px;
-      word-wrap: break-word;
-      word-break: break-word;
+      height: 100%;
       white-space: break-spaces;
     }
   }

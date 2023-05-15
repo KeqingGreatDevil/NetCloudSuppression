@@ -5,7 +5,7 @@
         <CommonHeader />
       </el-header>
       <el-main><router-view /></el-main>
-      <CommonFooter />
+      <!-- <CommonFooter /> -->
     </el-container>
   </div>
 </template>
