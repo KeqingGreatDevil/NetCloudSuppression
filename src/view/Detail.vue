@@ -14,23 +14,6 @@
               item
             }}</span>
           </div>
-          <p
-            class="d_introduce"
-            :class="{ d_introduce_active: !state.isBtnShow }"
-          >
-            介绍： {{ state.MusicDetail.description }}
-          </p>
-          <span
-            style="
-              cursor: pointer;
-              color: cornflowerblue;
-              display: flex;
-              float: right;
-            "
-            @click="state.isBtnShow = !state.isBtnShow"
-          >
-            {{ state.isBtnShow ? "展开" : "收起" }}
-          </span>
         </div>
       </div>
       <div class="d_songs">
@@ -63,23 +46,21 @@ onMounted(async () => {
   let id = useRoute().query.id;
   let res = await getMusicDetail(id);
   state.MusicDetail = res.data.playlist;
-  let MusicPlayList = await getMusicPlayList(id);
-  state.PlayList = MusicPlayList.data.songs;
-  console.log(state.PlayList);
+  console.log(res);
 });
+const showBtnFlag = false;
 const state = reactive({
   MusicDetail: "",
-  isBtnShow: "false",
-  PlayList: [],
+  showtitle: "展开",
 });
-const indexMethod = (index) => {
-  return index + 1;
+const showme = ref();
+const show = () => {
+  if (showme) {
+    if (showme.value.clientHeight >= 200) {
+    }
+    console.log(showme.value.clientHeight);
+  }
 };
-// const showme = ref("");
-// const isShowBtn = () => {
-//   let rowNum = showme.value.clientHeight;
-//   console.log(rowNum);
-// };
 </script>
 
 <style lang="scss" scoped>
@@ -116,15 +97,8 @@ const indexMethod = (index) => {
     }
     .d_introduce {
       width: 410px;
-      display: -webkit-box;
-      -webkit-line-clamp: 9;
-      -webkit-box-orient: vertical;
+      height: 100%;
       white-space: break-spaces;
-      overflow: hidden;
-      text-overflow: ellipsis; // 隐藏显示省略号
-    }
-    .d_introduce_active {
-      display: block;
     }
   }
 }
