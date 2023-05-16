@@ -6,13 +6,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { getMusicUrl } from "../request/api/item";
 
 const value = ref(0);
-const MusicUrl = async () => {
-  let res = await getMusicUrl(33894312);
-  console.log(res);
-};
 </script>
 
 <style lang="scss" scoped>
