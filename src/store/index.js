@@ -43,12 +43,27 @@ export const useMenuOptions = defineStore("menu", {
     };
   },
 });
-export const usePlayMusicBase= defineStore("music",{
-  state:()=>{
+export const usePlayMusicBase = defineStore("music", {
+  state: () => {
     return {
-      PlayMusicBase:[
-        
-      ]
-    }
-  }
-})
+      PlayMusicBase: [
+        {
+          al: {
+            id: 139649889,
+            name: "Pray Pray Pray",
+            picUrl:
+              "https://p1.music.126.net/PiGWWwu_p9C3TZtstNzrwQ==/109951166996366069.jpg",
+            pic_str: "109951166996366069",
+            pic: 109951166996366060,
+          },
+          ar: {
+            id: 1081487,
+            name: "polly",
+          },
+          id:1916256128,
+        },
+      ],
+      playIndex:0,
+    };
+  },
+});

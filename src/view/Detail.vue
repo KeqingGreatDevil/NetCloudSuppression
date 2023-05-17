@@ -10,9 +10,25 @@
           </div>
           <div>
             标签：
-            <span class="tags" v-for="item in state.MusicDetail.tags">{{
-              item
-            }}</span>
+            <span class="tags" v-for="item in state.MusicDetail.tags">
+              {{ item }}
+            </span>
+            <p
+              class="d_introduce"
+              :class="{ d_introduce_active: !state.isShowBtn }"
+            >
+              介绍： {{ state.MusicDetail.description }}
+            </p>
+            <span
+              @click="state.isShowBtn = !state.isShowBtn"
+              style="
+                display: flex;
+                justify-content: right;
+                color: #0c73c2;
+                cursor: pointer;
+              "
+              >{{ state.isShowBtn ? "展开" : "收起" }}</span
+            >
           </div>
         </div>
       </div>
@@ -20,17 +36,39 @@
         <div class="d_title">
           <h2>歌曲列表</h2>
           <span
-            >播放：<span style="color: #c20c0c; font-weight: bold">{{
-              state.MusicDetail.playCount
-            }}</span>
+            >播放：<span style="color: #c20c0c; font-weight: bold">
+              {{ state.MusicDetail.playCount }}
+            </span>
             次</span
           >
         </div>
-        <el-table :data="state.PlayList" stripe style="width: 100%">
-          <el-table-column type="index" :index="indexMethod" />
+        <el-table
+          ref="singleTableRef"
+          :data="state.MusicPlayList"
+          highlight-current-row
+          style="width: 100%"
+          @current-change="handleCurrentChange"
+        >
+          <el-table-column type="index" />
+          <el-table-column width="34px">
+            <template #default="scope">
+              <div
+                style="
+                  width: 17px;
+                  height: 17px;
+                  cursor: pointer;
+                  background: url(table.png) 0 -103px no-repeat;
+                "
+              ></div>
+            </template>
+          </el-table-column>
           <el-table-column prop="name" label="歌曲标题" />
-          <el-table-column prop="publishTime" label="时长" />
-          <el-table-column prop="ar[0].name" label="歌手" />
+          <el-table-column prop="dt" label="时长">
+            <template #default="scope">
+              <span>{{ timer(scope.row.dt) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="ar" label="歌手" :formatter="fileData" />
         </el-table>
       </div>
     </el-card>
@@ -39,27 +77,43 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { getMusicDetail, getMusicPlayList } from "../request/api/item";
 
 onMounted(async () => {
   let id = useRoute().query.id;
   let res = await getMusicDetail(id);
   state.MusicDetail = res.data.playlist;
-  console.log(res);
+  let PlayList = await getMusicPlayList(id);
+  state.MusicPlayList = PlayList.data.songs;
+  console.log(state.MusicDetail);
+  console.log(PlayList);
 });
-const showBtnFlag = false;
 const state = reactive({
   MusicDetail: "",
-  showtitle: "展开",
+  MusicPlayList: [],
+  isShow: "false",
+  isShowBtn: "false",
 });
-const showme = ref();
-const show = () => {
-  if (showme) {
-    if (showme.value.clientHeight >= 200) {
-    }
-    console.log(showme.value.clientHeight);
-  }
+const currentRow = ref();
+const handleCurrentChange = (val) => {
+  currentRow.value = val;
+  console.log(currentRow.value.id);
+};
+const fileData = (row) => {
+  let arr = [];
+  row.ar.forEach((item) => {
+    arr.push(item.name);
+  });
+  return arr.join("/");
+};
+const timer = (timestamp) => {
+  let date = new Date(timestamp);
+  let m =
+    (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+    ":";
+  let s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+  return m + s;
 };
 </script>
 
@@ -97,8 +151,15 @@ const show = () => {
     }
     .d_introduce {
       width: 410px;
-      height: 100%;
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-line-clamp: 9;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
       white-space: break-spaces;
+    }
+    .d_introduce_active {
+      display: block;
     }
   }
 }

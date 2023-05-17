@@ -5,7 +5,7 @@
         <CommonHeader />
       </el-header>
       <el-main><router-view /></el-main>
-      <!-- <CommonFooter /> -->
+      <el-footer><CommonFooter /></el-footer>
     </el-container>
   </div>
 </template>
@@ -26,5 +26,10 @@ import CommonFooter from "../components/CommonFooter.vue";
   padding: 0;
   margin: 0 auto;
   background-color: #ccc;
+}
+.el-footer {
+  width: 100%;
+  height: 50px;
+  padding: 0;
 }
 </style>
