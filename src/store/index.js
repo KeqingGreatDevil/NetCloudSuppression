@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const useMenuOptions = defineStore("menu", {
+export const useMenuStore = defineStore("menu", {
   state: () => {
     return {
       MenuOptions: [
@@ -43,7 +44,7 @@ export const useMenuOptions = defineStore("menu", {
     };
   },
 });
-export const usePlayMusicBase = defineStore("music", {
+export const usePlayListStore = defineStore("music", {
   state: () => {
     return {
       PlayMusicBase: [
@@ -60,10 +61,20 @@ export const usePlayMusicBase = defineStore("music", {
             id: 1081487,
             name: "polly",
           },
-          id:1916256128,
+          
         },
       ],
       playIndex:0,
+      isBtnShow:false,
+      id:1916256128,
     };
   },
+  actions:{
+      updateisShowPlayBtn(data) {
+        return this.isBtnShow=data
+      },
+      updateId(data) {
+        return this.id=data
+      },
+  }
 });

@@ -79,16 +79,16 @@
 import { useRoute } from "vue-router";
 import { onMounted, reactive, ref } from "vue";
 import { getMusicDetail, getMusicPlayList } from "../request/api/item";
+import { usePlayListStore } from "../store/index";
 
 onMounted(async () => {
   let id = useRoute().query.id;
   let res = await getMusicDetail(id);
   state.MusicDetail = res.data.playlist;
-  let PlayList = await getMusicPlayList(id);
-  state.MusicPlayList = PlayList.data.songs;
-  console.log(state.MusicDetail);
-  console.log(PlayList);
+  let getId = await getMusicPlayList(id);
+  state.MusicPlayList = getId.data.songs;
 });
+const PlayList = usePlayListStore();
 const state = reactive({
   MusicDetail: "",
   MusicPlayList: [],
@@ -98,7 +98,8 @@ const state = reactive({
 const currentRow = ref();
 const handleCurrentChange = (val) => {
   currentRow.value = val;
-  console.log(currentRow.value.id);
+  PlayList.updateId(currentRow.value.id);
+  console.log(currentRow.value);
 };
 const fileData = (row) => {
   let arr = [];

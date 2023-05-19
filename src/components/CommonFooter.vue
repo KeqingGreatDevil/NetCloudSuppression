@@ -5,7 +5,13 @@
         class="pev"
         style="background: url(playbar.png) 0 -130px no-repeat"
       ></span>
-      <span class="ply"></span>
+      <span
+        class="ply_pause"
+        @click="playMusic"
+        v-if="PlayList.isBtnShow"
+      ></span>
+      <span class="ply" @click="playMusic" v-else></span>
+
       <span
         class="pev"
         style="background: url(playbar.png) -80px -130px no-repeat"
@@ -31,10 +37,8 @@
         }}</span>
       </div>
       <audio
-        controls
-        :src="`https://music.163.com/song/media/outer/url?id=${
-          PlayList.PlayMusicBase[PlayList.playIndex].id
-        }.mp3`"
+        :src="`https://music.163.com/song/media/outer/url?id=${PlayList.id}.mp3`"
+        ref="a_play"
       ></audio>
     </div>
   </div>
@@ -42,10 +46,20 @@
 
 <script setup>
 import { ref } from "vue";
-import { usePlayMusicBase } from "../store/index";
+import { usePlayListStore } from "../store/index";
 
 const value = ref(0);
-const PlayList = usePlayMusicBase();
+const a_play = ref();
+const PlayList = usePlayListStore();
+const playMusic = () => {
+  if (a_play.value.paused) {
+    a_play.value.play();
+    PlayList.updateisShowPlayBtn(true);
+  } else {
+    a_play.value.pause();
+    PlayList.updateisShowPlayBtn(false);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -76,6 +90,13 @@ const PlayList = usePlayMusicBase();
       width: 36px;
       height: 36px;
       background: url(playbar.png) 0 -204px no-repeat;
+      cursor: pointer;
+    }
+    .ply_pause {
+      display: block;
+      width: 36px;
+      height: 36px;
+      background: url(playbar.png) 0 -165px no-repeat;
       cursor: pointer;
     }
   }
