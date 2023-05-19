@@ -61,20 +61,19 @@ export const usePlayListStore = defineStore("music", {
             id: 1081487,
             name: "polly",
           },
-          
+          id:1916256128,
         },
       ],
       playIndex:0,
       isBtnShow:false,
-      id:1916256128,
     };
   },
   actions:{
-      updateisShowPlayBtn(data) {
-        return this.isBtnShow=data
+      updateisShowPlayBtn(vaule) {
+        return this.isBtnShow=vaule
       },
-      updateId(data) {
-        return this.id=data
+      updatePlayList(vaule) {
+        return this.PlayMusicBase=vaule
       },
   }
 });

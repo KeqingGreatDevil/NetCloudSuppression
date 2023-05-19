@@ -37,7 +37,9 @@
         }}</span>
       </div>
       <audio
-        :src="`https://music.163.com/song/media/outer/url?id=${PlayList.id}.mp3`"
+        :src="`https://music.163.com/song/media/outer/url?id=${
+          PlayList.PlayMusicBase[PlayList.playIndex].id
+        }.mp3`"
         ref="a_play"
       ></audio>
     </div>

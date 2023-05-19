@@ -98,7 +98,6 @@ const state = reactive({
 const currentRow = ref();
 const handleCurrentChange = (val) => {
   currentRow.value = val;
-  PlayList.updateId(currentRow.value.id);
   console.log(currentRow.value);
 };
 const fileData = (row) => {
