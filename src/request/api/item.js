@@ -6,5 +6,5 @@ export function getMusicDetail(id){ // 获取歌单详情
   return service.get(`/playlist/detail?id=${id}`)
 }
 export function getMusicPlayList(id){ // 获取歌单所有歌曲
-  return service.get(`/playlist/track/all?id=${id}&limit=20&offset=1`)
+  return service.get(`/playlist/track/all?id=${id}&limit=999&offset=1`)
 }

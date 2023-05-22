@@ -4,6 +4,7 @@
       <span
         class="pev"
         style="background: url(playbar.png) 0 -130px no-repeat"
+        @click="BtnPev"
       ></span>
       <span
         class="ply_pause"
@@ -15,25 +16,26 @@
       <span
         class="pev"
         style="background: url(playbar.png) -80px -130px no-repeat"
+        @click="BtnNex"
       ></span>
     </div>
-    <img
-      :src="PlayList.PlayMusicBase[PlayList.playIndex].al.picUrl"
-      style="
-        width: 35px;
-        height: 35px;
-        margin: 0 9px 0 28px;
-        cursor: pointer;
-        border-radius: 20px;
-      "
-    />
     <div class="f_playMusic">
+      <img
+        :src="PlayList.PlayMusicBase[PlayList.playIndex].al.picUrl"
+        style="
+          width: 35px;
+          height: 35px;
+          margin: 0 9px 0 28px;
+          cursor: pointer;
+          border-radius: 20px;
+        "
+      />
       <div class="f_msg">
         <span class="title">{{
           PlayList.PlayMusicBase[PlayList.playIndex].al.name
         }}</span>
         <span class="songer">{{
-          PlayList.PlayMusicBase[PlayList.playIndex].ar.name
+          PlayList.fileData(PlayList.PlayMusicBase[PlayList.playIndex])
         }}</span>
       </div>
       <audio
@@ -47,13 +49,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { usePlayListStore } from "../store/index";
 
 const value = ref(0);
-const a_play = ref();
+const a_play = ref(null);
 const PlayList = usePlayListStore();
+
 const playMusic = () => {
+  //控制播放/暂停按钮
   if (a_play.value.paused) {
     a_play.value.play();
     PlayList.updateisShowPlayBtn(true);
@@ -62,6 +66,31 @@ const playMusic = () => {
     PlayList.updateisShowPlayBtn(false);
   }
 };
+const BtnPev = () => {
+  // 切换上一首，如果是第一首就切换最后一首
+  if (PlayList.playIndex > 0) {
+    PlayList.updatePlayIndexSwitch(-1);
+  } else {
+    PlayList.updateplayIndex(PlayList.PlayMusicBase.length - 1);
+  }
+};
+const BtnNex = () => {
+  // 切换下一首，如果是最后一首就切换第一首
+  if (PlayList.playIndex < PlayList.PlayMusicBase.length - 1) {
+    PlayList.updatePlayIndexSwitch(1);
+  } else {
+    PlayList.updateplayIndex(0);
+  }
+};
+
+watch(
+  // 监听id，自动播放
+  () => PlayList.PlayMusicBase[PlayList.playIndex].id,
+  () => {
+    a_play.value.autoplay = true;
+    PlayList.updateisShowPlayBtn(true);
+  }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -75,8 +104,8 @@ const playMusic = () => {
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   .playBtn {
     display: flex;
     justify-content: space-between;
@@ -103,6 +132,8 @@ const playMusic = () => {
     }
   }
   .f_playMusic {
+    display: flex;
+    width: 300px;
     .f_msg {
       .title {
         min-width: 30px;

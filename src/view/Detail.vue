@@ -34,7 +34,12 @@
       </div>
       <div class="d_songs">
         <div class="d_title">
-          <h2>歌曲列表</h2>
+          <div class="d_left">
+            <h2>歌曲列表</h2>
+            <span style="color: #666"
+              >（共{{ state.MusicPlayList.length }}首）</span
+            >
+          </div>
           <span
             >播放：<span style="color: #c20c0c; font-weight: bold">
               {{ state.MusicDetail.playCount }}
@@ -59,17 +64,27 @@
                   cursor: pointer;
                   background: url(table.png) 0 -103px no-repeat;
                 "
+                @click="handlePlay(scope.$index, scope.row)"
               ></div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="歌曲标题" />
+          <el-table-column prop="name" label="歌曲标题"> </el-table-column>
           <el-table-column prop="dt" label="时长">
             <template #default="scope">
               <span>{{ timer(scope.row.dt) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="ar" label="歌手" :formatter="fileData" />
+          <el-table-column
+            prop="ar"
+            label="歌手"
+            :formatter="PlayList.fileData"
+          />
         </el-table>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="state.MusicPlayList.length"
+        />
       </div>
     </el-card>
   </div>
@@ -87,6 +102,7 @@ onMounted(async () => {
   state.MusicDetail = res.data.playlist;
   let getId = await getMusicPlayList(id);
   state.MusicPlayList = getId.data.songs;
+  console.log(state.MusicPlayList.length);
 });
 const PlayList = usePlayListStore();
 const state = reactive({
@@ -96,24 +112,20 @@ const state = reactive({
   isShowBtn: "false",
 });
 const currentRow = ref();
-const handleCurrentChange = (val) => {
-  currentRow.value = val;
-  console.log(currentRow.value);
-};
-const fileData = (row) => {
-  let arr = [];
-  row.ar.forEach((item) => {
-    arr.push(item.name);
-  });
-  return arr.join("/");
-};
+const handleCurrentChange = (val) => {};
 const timer = (timestamp) => {
+  // 时间戳
   let date = new Date(timestamp);
   let m =
     (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
     ":";
   let s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
   return m + s;
+};
+const handlePlay = (index, row) => {
+  console.log(index, row);
+  PlayList.updateplayIndex(index);
+  PlayList.updatePlayList(state.MusicPlayList); // 需要优化
 };
 </script>
 
@@ -173,6 +185,10 @@ const timer = (timestamp) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .d_left {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 </style>

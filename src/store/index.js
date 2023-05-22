@@ -6,7 +6,7 @@ export const useMenuStore = defineStore("menu", {
     return {
       MenuOptions: [
         {
-          label: "首页",
+          label: "发现音乐",
           path: "/",
           name: "home",
         },
@@ -57,10 +57,20 @@ export const usePlayListStore = defineStore("music", {
             pic_str: "109951166996366069",
             pic: 109951166996366060,
           },
-          ar: {
-            id: 1081487,
-            name: "polly",
-          },
+          ar:[
+            {
+                "id": 12873554,
+                "name": "Yzz",
+                "tns": [],
+                "alias": []
+            },
+            {
+                "id": 32829967,
+                "name": "Yzz Beats",
+                "tns": [],
+                "alias": []
+            }
+        ],
           id:1916256128,
         },
       ],
@@ -75,5 +85,18 @@ export const usePlayListStore = defineStore("music", {
       updatePlayList(vaule) {
         return this.PlayMusicBase=vaule
       },
+      updateplayIndex(vaule){
+        return this.playIndex=vaule
+      },
+      updatePlayIndexSwitch(vaule){
+        return this.playIndex+=vaule
+      },
+
+      fileData (row) {// 处理歌手
+        let arr = row.ar.map((item) => {// 不会改变原数组，返回新数组
+          return item.name;
+        });
+        return arr.join("/"); // 不会改变原数组，返回字符串
+      }
   }
 });

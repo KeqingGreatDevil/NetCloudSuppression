@@ -66,19 +66,24 @@ const clickMenu = (item) => {
   .h_left {
     width: 100%;
     height: 100%;
-    margin-left: 30px;
     .logo {
       width: 157px;
       height: 69px;
       background: url("/topbar.png") no-repeat 0 0;
       cursor: pointer; // 改变鼠标指针
+      margin: 0 10px 0 10px;
     }
   }
   .h_center {
     width: 100%;
     height: 100%;
     .el-menu {
+      height: 100%;
       border-bottom: none;
+    }
+    :deep(.el-menu--horizontal > .el-menu-item.is-active) {
+      border: none;
+      background-color: #000;
     }
   }
   .h_right {
